@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy 6th Anniversary ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #ff4da6;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1, h2, p {
+      text-align: center;
+    }
+
+    /* Floating hearts animation */
+    .heart {
+      position: fixed;
+      bottom: -10px;
+      color: #ff4da6;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0.9; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Letter */
+    .letter {
+      max-width: 700px;
+      margin: 40px auto;
+      background: rgba(255, 77, 166, 0.1);
+      border: 2px solid #ff4da6;
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+
+    /* Hidden notes */
+    .note {
+      margin: 20px auto;
+      text-align: center;
+    }
+    .hidden-text {
+      display: none;
+      margin-top: 10px;
+      color: #fff;
+      font-style: italic;
+    }
+    button {
+      background: #ff4da6;
+      border: none;
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #fff;
+      color: #ff4da6;
+    }
+
+    /* Timeline */
+    .timeline {
+      max-width: 800px;
+      margin: 50px auto;
+      border-left: 3px solid #ff4da6;
+      padding-left: 20px;
+    }
+    .event {
+      margin: 20px 0;
+      position: relative;
+      cursor: pointer;
+    }
+    .event::before {
+      content: "❤";
+      position: absolute;
+      left: -30px;
+      color: #ff4da6;
+    }
+    .event-details {
+      display: none;
+      margin-top: 5px;
+      color: #fff;
+      font-size: 0.9em;
+    }
+
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #111;
+      border: 2px solid #ff4da6;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      z-index: 100;
+    }
+    .popup.active {
+      display: block;
+      animation: pop 0.6s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5) translate(-50%, -50%); opacity: 0; }
+      100% { transform: scale(1) translate(-50%, -50%); opacity: 1; }
+    }
+
+    /* Slideshow */
+    .slideshow-container {
+      max-width: 800px;
+      position: relative;
+      margin: auto;
+      border: 2px solid #ff4da6;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .slides {
+      display: none;
+      width: 100%;
+    }
+    .fade {
+      animation: fade 1.5s;
+    }
+    @keyframes fade {
+      from {opacity: 0.4}
+      to {opacity: 1}
+    }
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      padding: 16px;
+      color: #ff4da6;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.3s;
+      user-select: none;
+    }
+    .next { right: 0; }
+    .prev:hover, .next:hover { background-color: rgba(255, 77, 166, 0.2); }
+
+    /* Catch-the-Hearts */
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background:#111;
+      border:2px solid #ff4da6;
+      overflow:hidden;
+      margin:auto;
+      max-width:600px;
+      border-radius:12px;
+    }
+    #scoreBoard {
+      color:#ff4da6;
+      position:absolute;
+      top:10px;
+      left:10px;
+    }
+
+    /* Memory Match */
+    .memory-game {
+      width: 320px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(4, 70px);
+      grid-gap: 10px;
+    }
+    .memory-card {
+      width: 70px;
+      height: 70px;
+      background: #ff4da6;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .memory-card.flipped {
+      background: #111;
+      color: #ff4da6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Hearts -->
+  <script>
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (20 + Math.random()*20) + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 500);
+  </script>
+
+  <!-- Background Music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="C:\surprise\Index.html\Song.mp3\Ed Sheeran - Perfect.mp3" type="audio/mpeg">
+  </audio>
+  <div style="text-align:center; margin-top:10px;">
+    <button onclick="toggleMusic()">🔊 Play / Pause Music</button>
+  </div>
+
+  <!-- Catch sound -->
+  <audio id="catch-sound">
+    <source src="C:\surprise\Index.html\Song.mp3\catch.mp3" type="audio/mpeg">
+  </audio>
+
+  <h1>Happy 6th Anniversary, My Love 💖</h1>
+  <h2>October 11, 2019 – Forever</h2>
+
+
+  <div class="letter">
+    <p>My love,</p>
+    <p>
+      I can’t believe we’ve already been together for 6 years. From Grade 8 back in 2019 up to now in college, we really grew up together. Looking back, we’ve been through so many things 
+      good times, challenges, and even our little dramas and I’m just so thankful that through it all, it’s still you by my side.
+
+      I feel so lucky to have you as my girlfriend. Thank you for always being patient with me, for supporting me, and for staying even when I’m difficult to deal with sometimes. You’ve been my best friend and my partner all in one, and I wouldn’t trade that for anything.
+
+      I’m proud of us, of how far we’ve come, and I’m excited for everything ahead of us. I promise to keep choosing you every single day, no matter what.
+I love you so much. ❤️
+    </p>
+    <p>
+      This little digital gift is only a fraction of how much I adore you. Here’s to many more
+      years, adventures, and dreams together. 🥂
+    </p>
+    <p>Forever yours,<br>❤️ April</p>
+  </div>
+
+
+  <h2>Our Memories 📸</h2>
+  <div class="slideshow-container">
+    <img class="slides fade" src="C:\surprise\Index.html\images\3.jpeg" alt="Memory 1">
+    <img class="slides fade" src="C:\surprise\Index.html\images\8.jpeg" alt="Memory 2">
+    <img class="slides fade" src="C:\surprise\Index.html\images\10.jpeg" alt="Memory 3">
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </div>
+
+  <div class="note">
+    <button onclick="document.getElementById('note1').style.display='block'">Click me 💌</button>
+    <div id="note1" class="hidden-text">I love the way your smile lights up my world 🌸</div>
+  </div>
+  <div class="note">
+    <button onclick="document.getElementById('note2').style.display='block'"> Click me pa baby 💕</button>
+    <div id="note2" class="hidden-text">No matter what, I’ll always choose you my baby 💖</div>
+  </div>
+    </div>
+  <div class="note">
+    <button onclick="document.getElementById('note3').style.display='block'">Tuploka ko 💌 </button>
+    <div id="note3" class="hidden-text">I love you very much! even though unsay your very maldita and not pansin me 😁</div>
+  </div>
+  <div class="note">
+    <button onclick="document.getElementById('note4').style.display='block'">Tuploka ko 💌 </button>
+    <div id="note4" class="hidden-text">Happy 6 years, love ❤️ From Grade 8 until now in college, it’s always been you. Thank you for growing with me and staying by my side</div>
+  </div>
+    <div class="note">
+    <button onclick="document.getElementById('note5').style.display='block'">Tuploka ko 💌 </button>
+    <div id="note5" class="hidden-text">I think I deserve an award for having the prettiest girlfriend for 6 straight years</div>
+  </div>
+    <div class="note">
+    <button onclick="document.getElementById('note6').style.display='block'">Another Surprise </button>
+    <div id="note6" class="hidden-text">Yaw pangita lain, ang mangita kay pangit HAHAHAHAHA </div>
+  </div>
+
+
+  <div style="text-align:center; margin-top:40px;">
+  <h2>Our Journey Together</h2>
+  <div class="timeline">
+    <div class="event" onclick="toggleDetails(this)"><b>2019</b> – We became “us” 💑
+      <div class="event-details">Our first laughs, our first hugs — the start of forever.</div>
+    </div>
+    <div class="event" onclick="toggleDetails(this)"><b>2020</b> – Grew stronger 💪
+      <div class="event-details">We held each other through everything.</div>
+    </div>
+    <div class="event" onclick="toggleDetails(this)"><b>2021</b> – Adventures ✈️
+      <div class="event-details">Trips, fun, and memories we’ll always keep.</div>
+    </div>
+    <div class="event" onclick="toggleDetails(this)"><b>2022</b> – Endless laughter 🥰
+      <div class="event-details">Our silly jokes and late night talks.</div>
+    </div>
+    <div class="event" onclick="toggleDetails(this)"><b>2023</b> – Dreaming 💍
+      <div class="event-details">We started imagining our forever future.</div>
+    </div>
+    <div class="event" onclick="toggleDetails(this)"><b>2024</b> – We really love each other 🌹
+      <div class="event-details">And this is just the beginning.</div>
+    </div>
+     <div class="event" onclick="toggleDetails(this)"><b>2025</b> – Six years strong 🌹
+      <div class="event-details">And now here we are 6 years together hehehe</div>
+    </div>
+  </div>
+
+  <!-- Mini Game: Catch the Hearts -->
+  <h2 style="text-align:center;">Mini-Game: Catch the Hearts 💘</h2>
+  <div id="gameArea">
+    <p id="scoreBoard">Score: 0</p>
+  </div>
+  <p style="text-align:center; font-style:italic;">Catch 10 hearts to reveal a secret!</p>
+  <div id="secretMessage" style="display:none; text-align:center; color:#fff; margin-top:15px;">
+    💕 You caught my heart, just like you caught me six years ago 💕
+  </div>
+
+  <!-- Mini Game: Memory Match -->
+  <h2 style="text-align:center;">Mini-Game: Memory Match 🧩</h2>
+  <div class="memory-game" id="memoryGame"></div>
+  <p id="memoryMessage" style="text-align:center; display:none; color:#fff;">
+    You found all our memories love love! ❤️
+  </p>
+
+  <!-- Popup -->
+  <div style="text-align:center; margin-top:40px;">
+    <button onclick="document.getElementById('popup').classList.add('active')">
+      Open Your Final Surprise 🎉
+    </button>
+<div id="popup" class="popup">
+  <h2>💖 I Love You Forever 💖</h2>
+  <p>You are my soulmate, my forever, my everything. 🖤💖</p>
+    <p>Tuscania days HAHAHAHA</p>
+
+  <!-- Replace with your own video -->
+  <video width="300" height="180" controls autoplay>
+    <source src="C:\surprise\Index.html\Video.mp4\Video of Us.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <br><br>
+  <button onclick="document.getElementById('popup').classList.remove('active')">Close</button>
+</div>
+
+  <!-- Scripts -->
+  <script>
+    // Play/Pause background music
+    function toggleMusic() {
+      const music = document.getElementById("bg-music");
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    }
+
+    // Slideshow
+    let slideIndex = 0;
+    showSlides();
+    function plusSlides(n) {
+      slideIndex += n-1;
+      showSlides();
+    }
+    function showSlides() {
+      let i;
+      const slides = document.getElementsByClassName("slides");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}    
+      slides[slideIndex-1].style.display = "block";  
+      setTimeout(showSlides, 4000); 
+    }
+
+    // Timeline
+    function toggleDetails(el) {
+      const details = el.querySelector(".event-details");
+      details.style.display = details.style.display === "block" ? "none" : "block";
+    }
+
+    // Catch the Hearts game
+    let score = 0;
+    function createFallingHeart() {
+      const heart = document.createElement("div");
+      heart.innerHTML = "❤";
+      heart.style.position = "absolute";
+      heart.style.left = Math.random() * 550 + "px";
+      heart.style.top = "-30px";
+      heart.style.fontSize = "24px";
+      heart.style.color = "#ff4da6";
+      heart.style.cursor = "pointer";
+      document.getElementById("gameArea").appendChild(heart);
+
+      let fallInterval = setInterval(() => {
+        heart.style.top = (parseInt(heart.style.top) + 3) + "px";
+        if (parseInt(heart.style.top) > 370) {
+          heart.remove();
+          clearInterval(fallInterval);
+        }
+      }, 30);
+
+      heart.addEventListener("click", () => {
+        score++;
+        document.getElementById("catch-sound").play();
+        document.getElementById("scoreBoard").textContent = "Score: " + score;
+        heart.remove();
+        clearInterval(fallInterval);
+        if (score >= 10) {
+          document.getElementById("secretMessage").style.display = "block";
+        }
+      });
+    }
+    setInterval(createFallingHeart, 1200);
+
+    // Memory Match game
+    const memoryGame = document.getElementById("memoryGame");
+    const icons = ["💕","🌹","😘","🥰","💍","🎶"];
+    let cards = [...icons, ...icons];
+    cards.sort(() => 0.5 - Math.random());
+
+    let firstCard = null, secondCard = null, lockBoard = false, matched = 0;
+    cards.forEach(icon => {
+      const card = document.createElement("div");
+      card.className = "memory-card";
+      card.dataset.icon = icon;
+      card.innerHTML = "?";
+      card.addEventListener("click", flipCard);
+      memoryGame.appendChild(card);
+    });
+
+    function flipCard() {
+      if (lockBoard || this.classList.contains("flipped")) return;
+      this.classList.add("flipped");
+      this.innerHTML = this.dataset.icon;
+      if (!firstCard) {
+        firstCard = this;
+      } else {
+        secondCard = this;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      if (firstCard.dataset.icon === secondCard.dataset.icon) {
+        matched += 2;
+        firstCard = null;
+        secondCard = null;
+        if (matched === cards.length) {
+          document.getElementById("memoryMessage").style.display = "block";
+        }
+      } else {
+        lockBoard = true;
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          firstCard.innerHTML = "?";
+          secondCard.innerHTML = "?";
+          firstCard = null;
+          secondCard = null;
+          lockBoard = false;
+        }, 800);
+      }
+    }
+  </script>
+
+</body>
+</html>

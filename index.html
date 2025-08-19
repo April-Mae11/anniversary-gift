@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Anniversary</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      color: #ff4da6; /* Blackpink pink */
+      font-family: 'Arial', sans-serif;
+    }
+
+    .lockscreen {
+      text-align: center;
+    }
+
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: #333;
+    }
+
+    .dot.filled {
+      background-color: #ff4da6;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .key {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #111;
+      border: 2px solid #ff4da6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: #ff4da6;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .key:hover {
+      background-color: #ff4da6;
+      color: #000;
+    }
+
+    .message {
+      margin-top: 20px;
+      height: 20px;
+    }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+      75% { transform: translateX(-10px); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="lockscreen">
+    <h2>Enter Our Anniversary Date ❤️</h2>
+    <div class="pin-dots" id="pinDots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <div class="keypad">
+      <div class="key" onclick="pressKey('1')">1</div>
+      <div class="key" onclick="pressKey('2')">2</div>
+      <div class="key" onclick="pressKey('3')">3</div>
+      <div class="key" onclick="pressKey('4')">4</div>
+      <div class="key" onclick="pressKey('5')">5</div>
+      <div class="key" onclick="pressKey('6')">6</div>
+      <div class="key" onclick="pressKey('7')">7</div>
+      <div class="key" onclick="pressKey('8')">8</div>
+      <div class="key" onclick="pressKey('9')">9</div>
+      <div></div>
+      <div class="key" onclick="pressKey('0')">0</div>
+      <div class="key" onclick="clearPin()">⌫</div>
+    </div>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const correctPin = "101119"; // Example: Oct 11, 2019
+    let enteredPin = "";
+
+    function pressKey(num) {
+      if (enteredPin.length < 6) {
+        enteredPin += num;
+        updateDots();
+        if (enteredPin.length === 6) checkPin();
+      }
+    }
+
+    function clearPin() {
+      enteredPin = enteredPin.slice(0, -1);
+      updateDots();
+    }
+
+    function updateDots() {
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('filled', i < enteredPin.length);
+      });
+    }
+
+    function checkPin() {
+      if (enteredPin === correctPin) {
+        document.getElementById('message').textContent = "Unlocked! 💖";
+        setTimeout(() => {
+          window.location.href = "gift.html"; // Redirect to the main gift page
+        }, 1000);
+      } else {
+        document.getElementById('message').textContent = "Try again, love 💕";
+        document.querySelector('.lockscreen').classList.add('shake');
+        setTimeout(() => {
+          document.querySelector('.lockscreen').classList.remove('shake');
+        }, 300);
+        enteredPin = "";
+        updateDots();
+      }
+    }
+  </script>
+</body>
+</html>
